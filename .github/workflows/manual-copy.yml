@@ -11,15 +11,14 @@ jobs:
     - name: Checkout Repo B
       uses: actions/checkout@v3
 
-    - name: Clone Repo A
+    - name: Clone Repo A (carsrus-marketplace-maurituis)
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
-        git clone https://$REPO_ACCESS_TOKEN@github.com/rishenarmoogum/carsrus-marketplace-maurituis.git temp-repo-a
+        git clone https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/rishenarmoogum/carsrus-marketplace-maurituis.git temp-repo-a
 
     - name: Copy all files from Repo A to Repo B
       run: |
-        # Copy everything except .git directory
         rsync -av --progress temp-repo-a/ ./ --exclude .git
 
     - name: Commit and push
@@ -27,5 +26,6 @@ jobs:
         git add .
         git commit -m "Manual sync from Repo A (full copy)"
         git push origin main
+
 
 
