@@ -1,0 +1,31 @@
+name: Manual Copy from Repo A
+
+on:
+  workflow_dispatch:  # manual trigger
+
+jobs:
+  copy-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo B
+      uses: actions/checkout@v3
+
+    - name: Clone Repo A
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+        git clone https://$REPO_ACCESS_TOKEN@github.com/your-username/repo-a.git repo-a
+
+    - name: Copy files from Repo A to Repo B
+      run: |
+        # Example: copy only a folder named 'shared-components'
+        cp -r repo-a/shared-components ./shared-components
+
+    - name: Commit & Push Changes
+      run: |
+        git add .
+        git commit -m "Manual sync from Repo A"
+        git push origin main
+Add manual sync workflow from Repo A
+
