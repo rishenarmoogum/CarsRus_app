@@ -22,7 +22,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, viewMode, onViewDetails, onConta
         />
         <div className="absolute top-4 left-4">
           <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Available
+            For Sale
           </span>
         </div>
         <div className="absolute top-4 right-4">

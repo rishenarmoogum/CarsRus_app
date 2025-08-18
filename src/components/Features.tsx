@@ -6,8 +6,8 @@ const Features = () => {
   const features = [
     {
       icon: Shield,
-      title: 'Verified Dealers',
-      description: 'All our dealers are thoroughly vetted and verified for your safety and peace of mind.'
+      title: 'Professional',
+      description: 'We uphold the highest standards of professionalism in every interaction, demonstrating expertise, respect, and accountability'
     },
     {
       icon: Award,
@@ -16,8 +16,8 @@ const Features = () => {
     },
     {
       icon: Users,
-      title: '24/7 Support',
-      description: 'Our dedicated team is available round the clock to assist with your car journey.'
+      title: 'Trust',
+      description: 'We earn trust through transparency, integrity, and consistently delivering on our promises.'
     },
     {
       icon: Clock,

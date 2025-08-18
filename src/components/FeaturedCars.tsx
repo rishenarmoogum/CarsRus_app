@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import CarDetailsModal from './CarDetailsModal';
+import ContactModal from './ContactModal';
 import FeaturedCarCard from './featured-cars/FeaturedCarCard';
 import { useFeaturedCars } from '../hooks/useFeaturedCars';
 import { Car } from '../hooks/useCars';
@@ -10,11 +11,17 @@ import { Car } from '../hooks/useCars';
 const FeaturedCars = () => {
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const { allCars } = useFeaturedCars();
 
   const handleViewDetails = (car: Car) => {
     setSelectedCar(car);
     setIsDetailsModalOpen(true);
+  };
+
+  const handleContactSeller = (car: Car) => {
+    setSelectedCar(car);
+    setIsContactModalOpen(true);
   };
 
   return (
@@ -60,6 +67,14 @@ const FeaturedCars = () => {
         car={selectedCar}
         isOpen={isDetailsModalOpen}
         onClose={() => setIsDetailsModalOpen(false)}
+        onContactSeller={handleContactSeller}
+      />
+      
+      {/* Contact Modal */}
+      <ContactModal 
+        car={selectedCar}
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
       />
     </>
   );

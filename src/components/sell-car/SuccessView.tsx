@@ -10,7 +10,7 @@ const SuccessView = () => {
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Success!</h2>
         <p className="text-gray-600 mb-6">
-          Your car has been listed successfully! Redirecting to home page...
+          Thank you for uploading your car on CarsRus. Your car will be posted on the page once approved by the Administrator. If the buyer of your car require lease/loan facilities please contact Mr Raj on 55033736 (Whatsapp available as well).
         </p>
       </Card>
     </div>

@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
+import { useCarModels } from '@/hooks/useCarModels';
 
 interface CarDetailsFormProps {
   form: any;
@@ -10,6 +11,8 @@ interface CarDetailsFormProps {
 }
 
 const CarDetailsForm = ({ form, handleChange }: CarDetailsFormProps) => {
+  const { getBrands, getModelsByBrand, loading } = useCarModels();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-2">
@@ -19,17 +22,15 @@ const CarDetailsForm = ({ form, handleChange }: CarDetailsFormProps) => {
           value={form.make}
           onChange={handleChange}
           required
+          disabled={loading}
           className="w-full p-3 border border-red-200 rounded-lg focus:border-red-500 focus:ring-red-500"
         >
           <option value="">Select Make</option>
-          <option value="Toyota">Toyota</option>
-          <option value="Honda">Honda</option>
-          <option value="Nissan">Nissan</option>
-          <option value="Mercedes">Mercedes</option>
-          <option value="BMW">BMW</option>
-          <option value="Audi">Audi</option>
-          <option value="Kia">Kia</option>
-          <option value="Hyundai">Hyundai</option>
+          {getBrands().map((brand) => (
+            <option key={brand} value={brand}>
+              {brand}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -37,9 +38,10 @@ const CarDetailsForm = ({ form, handleChange }: CarDetailsFormProps) => {
         <Label htmlFor="model">Model *</Label>
         <Input
           name="model"
+          type="text"
           value={form.model}
           onChange={handleChange}
-          placeholder="e.g., Corolla, Civic"
+          placeholder="e.g., Corolla"
           required
           className="border-red-200 focus:border-red-500 focus:ring-red-500"
         />
@@ -86,6 +88,46 @@ const CarDetailsForm = ({ form, handleChange }: CarDetailsFormProps) => {
       </div>
 
       <div className="space-y-2">
+        <Label htmlFor="engine_capacity">Engine Capacity (cc)</Label>
+        <Input
+          name="engine_capacity"
+          type="number"
+          value={form.engine_capacity}
+          onChange={handleChange}
+          placeholder="e.g., 1500"
+          className="border-red-200 focus:border-red-500 focus:ring-red-500"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="seats">Number of Seats</Label>
+        <Input
+          name="seats"
+          type="number"
+          value={form.seats}
+          onChange={handleChange}
+          placeholder="e.g., 5"
+          min="2"
+          max="8"
+          className="border-red-200 focus:border-red-500 focus:ring-red-500"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="doors">Number of Doors</Label>
+        <Input
+          name="doors"
+          type="number"
+          value={form.doors}
+          onChange={handleChange}
+          placeholder="e.g., 4"
+          min="2"
+          max="5"
+          className="border-red-200 focus:border-red-500 focus:ring-red-500"
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="telephone">Telephone Number</Label>
         <Input
           name="telephone"
@@ -114,6 +156,7 @@ const CarDetailsForm = ({ form, handleChange }: CarDetailsFormProps) => {
           <option value="Red">Red</option>
           <option value="Blue">Blue</option>
           <option value="Gray">Gray</option>
+          <option value="Others">Others</option>
         </select>
       </div>
 

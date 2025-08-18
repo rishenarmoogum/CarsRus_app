@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { supabase } from '../integrations/supabase/client';
+import { Button } from '../components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -12,15 +15,50 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you for your message! We will get back to you within 24 hours.');
-    console.log('Contact form submitted:', form);
+    setIsSubmitting(true);
+    
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .insert([{
+          name: form.name,
+          email: form.email,
+          phone: form.phone || null,
+          subject: form.subject,
+          message: form.message
+        }]);
+      
+      if (error) {
+        console.error('Error submitting message:', error);
+        alert('Failed to send message. Please try again.');
+      } else {
+        // Reset form
+        setForm({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+        // Show success modal
+        setShowSuccessModal(true);
+      }
+    } catch (error) {
+      console.error('Error submitting message:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -211,10 +249,11 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                disabled={isSubmitting}
+                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="inline w-5 h-5 mr-2" />
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>
@@ -234,6 +273,26 @@ const Contact = () => {
       </div>
 
       <Footer />
+      
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Message Sent Successfully!</DialogTitle>
+            <DialogDescription>
+              Your message has successfully been sent to CarsRus. Someone will revert back to you shortly. You can also contact us on 55033736.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button 
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full"
+            >
+              OK
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

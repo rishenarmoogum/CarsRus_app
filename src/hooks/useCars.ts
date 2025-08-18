@@ -23,6 +23,8 @@ export interface Car {
   featured?: boolean;
   monthly_lease?: number;
   upload?: boolean;
+  engine_capacity?: number;
+  doors?: number;
 }
 
 export interface CarFilters {
@@ -85,7 +87,9 @@ export const useCars = () => {
               seller_name: profile?.full_name || 'Unknown Seller',
               seller_email: profile?.email || '',
               featured: car.featured || false,
-              monthly_lease: car.monthly_lease || 0
+              monthly_lease: car.monthly_lease || 0,
+              engine_capacity: car.engine_capacity,
+              doors: car.doors
             };
           })
         );

@@ -13,6 +13,9 @@ import SuccessView from '../components/sell-car/SuccessView';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../integrations/supabase/client';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { Checkbox } from '../components/ui/checkbox';
+import TermsModal from '../components/TermsModal';
 
 const SellCar = () => {
   const { user, loading } = useAuth();
@@ -21,6 +24,9 @@ const SellCar = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     make: '',
@@ -28,12 +34,14 @@ const SellCar = () => {
     year: '',
     price: '',
     mileage: '',
+    engine_capacity: '',
+    seats: '',
+    doors: '',
     color: '',
     type: '',
     fuel: '',
     engine: '',
     transmission: '',
-    seats: '',
     telephone: '',
     description: ''
   });
@@ -113,6 +121,16 @@ const SellCar = () => {
       alert('Please log in to sell your car');
       return;
     }
+
+    if (!recaptchaValue) {
+      alert('Please complete the reCAPTCHA verification');
+      return;
+    }
+
+    if (!termsAccepted) {
+      alert('Please accept the Terms and Conditions to continue');
+      return;
+    }
     
     // Show confirmation dialog first
     setShowConfirmDialog(true);
@@ -123,6 +141,14 @@ const SellCar = () => {
     setIsSubmitting(true);
     
     try {
+      // Verify reCAPTCHA first
+      const { data: recaptchaData, error: recaptchaError } = await supabase.functions.invoke('verify-recaptcha', {
+        body: { recaptchaResponse: recaptchaValue },
+      });
+
+      if (recaptchaError || !recaptchaData?.success) {
+        throw new Error('reCAPTCHA verification failed. Please try again.');
+      }
       // Upload images to Supabase Storage
       const uploadedImageUrls = await Promise.all(
         images.map(file => uploadImageToSupabase(file))
@@ -143,6 +169,8 @@ const SellCar = () => {
             fuel: form.fuel,
             transmission: form.transmission,
             seats: parseInt(form.seats) || 5,
+            engine_capacity: parseInt(form.engine_capacity) || null,
+            doors: parseInt(form.doors) || null,
             telephone: form.telephone,
             description: form.description,
             images: uploadedImageUrls,
@@ -268,10 +296,40 @@ const SellCar = () => {
                 />
               </div>
 
+              {/* Terms and Conditions */}
+              <div className="flex items-start space-x-3 p-4 border border-red-200 rounded-lg bg-red-50">
+                <Checkbox 
+                  id="terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                  className="mt-1"
+                />
+                <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
+                  I am agreeable to the{' '}
+                  <button
+                    type="button"
+                    onClick={() => setShowTermsModal(true)}
+                    className="text-red-600 hover:text-red-700 underline font-medium"
+                  >
+                    Terms and Conditions
+                  </button>
+                  {' '}of Carsrus Ltd (Include Privacy policy)
+                </Label>
+              </div>
+
+              {/* reCAPTCHA */}
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  sitekey="6LeHpqUrAAAAAIdpQlqpLsXPDpPJQ8fNjfKBKiF8"
+                  onChange={setRecaptchaValue}
+                  onExpired={() => setRecaptchaValue(null)}
+                />
+              </div>
+
               <Button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-lg font-semibold"
+                disabled={isSubmitting || !recaptchaValue || !termsAccepted}
+                className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-lg font-semibold disabled:opacity-50"
               >
                 {isSubmitting ? 'Listing Your Car...' : 'List My Car'}
               </Button>
@@ -286,7 +344,7 @@ const SellCar = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Car Listing Submission</AlertDialogTitle>
             <AlertDialogDescription className="text-sm leading-relaxed">
-              Thank you for uploading your car on CarsRus. Your car will be listed on the page once approved by the administrator. If a buyer of the car require any financial assistance please Whatsapp on 55033736.
+              Thank you for uploading your car on CarsRus. Your car will be posted on the page once approved by the Administrator. If the buyer of your car require lease/loan facilities please contact Mr Raj on 55033736 (Whatsapp available as well).
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -296,6 +354,12 @@ const SellCar = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Terms and Conditions Modal */}
+      <TermsModal 
+        open={showTermsModal} 
+        onClose={() => setShowTermsModal(false)} 
+      />
     </div>
   );
 };

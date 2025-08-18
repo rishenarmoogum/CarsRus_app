@@ -6,9 +6,10 @@ interface CarDetailsModalProps {
   car: any;
   isOpen: boolean;
   onClose: () => void;
+  onContactSeller?: (car: any) => void;
 }
 
-const CarDetailsModal = ({ car, isOpen, onClose }: CarDetailsModalProps) => {
+const CarDetailsModal = ({ car, isOpen, onClose, onContactSeller }: CarDetailsModalProps) => {
   if (!isOpen || !car) return null;
 
   return (
@@ -127,6 +128,30 @@ const CarDetailsModal = ({ car, isOpen, onClose }: CarDetailsModalProps) => {
                     </div>
                   </div>
                 )}
+
+                {car.engine_capacity && (
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                      <span className="text-red-600 font-semibold text-xs">CC</span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Engine Capacity</p>
+                      <p className="font-semibold">{car.engine_capacity} cc</p>
+                    </div>
+                  </div>
+                )}
+
+                {car.doors && (
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                      <span className="text-teal-600 font-semibold text-xs">DR</span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Number of Doors</p>
+                      <p className="font-semibold">{car.doors}</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -177,7 +202,10 @@ const CarDetailsModal = ({ car, isOpen, onClose }: CarDetailsModalProps) => {
             >
               Close
             </button>
-            <button className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors">
+            <button 
+              onClick={() => onContactSeller?.(car)}
+              className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors"
+            >
               Contact Seller
             </button>
           </div>

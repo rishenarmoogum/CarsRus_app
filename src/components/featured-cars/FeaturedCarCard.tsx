@@ -24,7 +24,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, onViewDetails })
         />
         <div className="absolute top-4 left-4">
           <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            {car.featured ? 'Featured' : 'Available'}
+            {car.featured ? 'Featured' : 'For Sale'}
           </span>
         </div>
         <div className="absolute top-4 right-4">

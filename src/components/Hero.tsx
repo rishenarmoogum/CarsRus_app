@@ -17,7 +17,7 @@ const Hero = () => {
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
                 Find Your Perfect
-                <span className="block text-red-600">Car in Mauritius</span>
+                <span className="block text-red-600">Second-Hand Car in Mauritius</span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
                 Discover the island's most trusted car marketplace. Buy, sell, and explore premium vehicles with confidence.
@@ -27,11 +27,11 @@ const Hero = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-red-600">500+</div>
+                <div className="text-3xl font-bold text-red-600">50+</div>
                 <div className="text-sm text-gray-600">Cars Available</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-red-600">1000+</div>
+                <div className="text-3xl font-bold text-red-600">100+</div>
                 <div className="text-sm text-gray-600">Happy Customers</div>
               </div>
               <div className="text-center">
@@ -56,14 +56,15 @@ const Hero = () => {
                 Sell Your Car
               </Link>
             </div>
+
           </div>
 
           {/* Right Content - Hero Image */}
           <div className="relative">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                alt="Luxury car in Mauritius"
+                src="/lovable-uploads/ce497fcc-cb6d-46d8-888f-b7bc82647723.png"
+                alt="CarsRus - Premium Car Marketplace"
                 className="w-full h-[500px] object-cover rounded-3xl shadow-2xl"
               />
               
@@ -78,7 +79,7 @@ const Hero = () => {
               <div className="absolute -bottom-4 -right-4 bg-white/90 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-lg">
                 <div className="flex items-center space-x-2">
                   <Users className="w-5 h-5 text-red-500" />
-                  <span className="font-semibold text-gray-900">Trusted by 1000+</span>
+                  <span className="font-semibold text-gray-900">Trusted by 100+ Customers</span>
                 </div>
               </div>
             </div>

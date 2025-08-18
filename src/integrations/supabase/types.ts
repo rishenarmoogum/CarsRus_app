@@ -14,11 +14,31 @@ export type Database = {
   }
   public: {
     Tables: {
+      "Car Model": {
+        Row: {
+          Brand: string | null
+          Model: string | null
+          SN: number
+        }
+        Insert: {
+          Brand?: string | null
+          Model?: string | null
+          SN: number
+        }
+        Update: {
+          Brand?: string | null
+          Model?: string | null
+          SN?: number
+        }
+        Relationships: []
+      }
       cars: {
         Row: {
           color: string | null
           created_at: string | null
           description: string | null
+          doors: number | null
+          engine_capacity: number | null
           featured: boolean
           fuel: string | null
           id: string
@@ -40,6 +60,8 @@ export type Database = {
           color?: string | null
           created_at?: string | null
           description?: string | null
+          doors?: number | null
+          engine_capacity?: number | null
           featured?: boolean
           fuel?: string | null
           id?: string
@@ -61,6 +83,8 @@ export type Database = {
           color?: string | null
           created_at?: string | null
           description?: string | null
+          doors?: number | null
+          engine_capacity?: number | null
           featured?: boolean
           fuel?: string | null
           id?: string
@@ -80,12 +104,43 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          subject?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string
+          phone: string | null
           updated_at: string | null
         }
         Insert: {
@@ -93,6 +148,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          phone?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -100,6 +156,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          phone?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -109,7 +166,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_car_models: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          SN: number
+          Brand: string
+          Model: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
